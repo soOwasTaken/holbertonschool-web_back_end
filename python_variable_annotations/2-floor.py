@@ -2,6 +2,7 @@
 """Basic annotations - add"""
 import math
 
-def floor(n: float):
+
+def floor(n: float) -> int:
     """Return the floor of a float"""
     return (math.floor(n))
