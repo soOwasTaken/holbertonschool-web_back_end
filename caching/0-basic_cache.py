@@ -2,6 +2,7 @@
 """ BasicCache module """
 from base_caching import BaseCaching
 
+
 class BasicCache(BaseCaching):
     """ BasicCache class. Inherits from BaseCaching.
         This caching system doesn’t have limit.
