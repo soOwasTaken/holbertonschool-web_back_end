@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Basic annotations - make multiplier"""
+"""Basic annotations"""
 from typing import Iterable, Sequence, List, Tuple
 
 
