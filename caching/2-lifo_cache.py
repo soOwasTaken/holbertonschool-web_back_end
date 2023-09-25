@@ -1,38 +1,37 @@
 #!/usr/bin/python3
-""" LRUCache module """
+""" LIFOCache module
+"""
 from base_caching import BaseCaching
-from collections import deque
 
 
-class LRUCache(BaseCaching):
-    """ LRUCache class. Inherits from BaseCaching.
-        Uses LRU algorithm.
+class LIFOCache(BaseCaching):
+    """ LIFOCache class that inherits from BaseCaching
     """
 
     def __init__(self):
+        """ Initialize LIFOCache
+        """
         super().__init__()
-        self.lru_order = deque()
+        self.order_of_keys = []
 
     def put(self, key, item):
-        """ Put an item in the cache """
+        """ Add an item in the cache
+        """
         if key is None or item is None:
             return
 
-        if key in self.lru_order:
-            self.lru_order.remove(key)
-        self.lru_order.append(key)
+        if key not in self.cache_data:
+            if len(self.cache_data) >= BaseCaching.MAX_ITEMS:
+                last_key = self.order_of_keys.pop()
+                del self.cache_data[last_key]
+                print(f"DISCARD: {last_key}")
 
         self.cache_data[key] = item
-
-        if len(self.lru_order) > BaseCaching.MAX_ITEMS:
-            discarded_key = self.lru_order.popleft()
-            del self.cache_data[discarded_key]
-            print(f"DISCARD: {discarded_key}")
+        self.order_of_keys.append(key)
 
     def get(self, key):
-        """ Get an item by key """
-        value = self.cache_data.get(key, None)
-        if value is not None:
-            self.lru_order.remove(key)
-            self.lru_order.append(key)
-        return value
+        """ Get an item by key
+        """
+        if key is None or key not in self.cache_data:
+            return None
+        return self.cache_data.get(key)
