@@ -43,7 +43,7 @@ class Server:
         page_data = self.dataset()[start_idx:end_idx]
         return page_data if page_data else []
 
-    def get_hyper(self, page:int = 1, page_size: int = 10) -> List[List]:
+    def get_hyper(self, page: int = 1, page_size: int = 10) -> List[List]:
         """Return a dictionary containing the following key-value pairs:"""
         data = self.get_page(page, page_size)
         total_pages = math.ceil(len(self.dataset()) / page_size)
