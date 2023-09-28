@@ -37,7 +37,7 @@ class Server:
         assert isinstance(
             page, int) and page > 0, "Page must be a positive integer"
         assert isinstance(
-            page_size, int) and page_size > 0, "Page size must be a positive integer"
+            page_size, int) and page_size > 0, "Page size must positiv integer"
 
         start_idx, end_idx = index_range(page, page_size)
         page_data = self.dataset()[start_idx:end_idx]
