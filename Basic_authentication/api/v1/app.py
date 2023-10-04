@@ -8,28 +8,39 @@ from flask import Flask, jsonify, abort, request
 from flask_cors import (CORS, cross_origin)
 import os
 
-
 app = Flask(__name__)
 app.register_blueprint(app_views)
 CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
+
+# Initialize auth to None
 auth = None
-if os.getenv('AUTH_TYPE') == 'auth':
-    from api.v1.auth.auth import Auth
-    auth = Auth()
+
+# Based on the AUTH_TYPE environment variable, instantiate the proper authentication class
+if getenv('AUTH_TYPE') == 'auth':
+    from api.v1.auth.auth import Auth  # import Auth from api.v1.auth.auth
+    auth = Auth()  # create an instance of Auth and assign it to auth
 
 
-def before_request() -> None:
-    """ Before request handler
+@app.before_request
+def before_request_handler():
+    """
+    Handle actions before processing the request
     """
     if auth is None:
         return
-    excluded_paths = ['/api/v1/status/',
-                      '/api/v1/unauthorized/',
-                      '/api/v1/forbidden/']
+    
+    # List of paths that don't require authentication
+    excluded_paths = ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/']
+
+    # If request path is in the excluded list, do nothing
     if not auth.require_auth(request.path, excluded_paths):
         return
+
+    # If authorization_header method returns None, abort with 401 error
     if auth.authorization_header(request) is None:
         abort(401)
+
+    # If current_user method returns None, abort with 403 error
     if auth.current_user(request) is None:
         abort(403)
 
