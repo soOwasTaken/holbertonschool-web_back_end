@@ -2,7 +2,7 @@
 """ DocDocDocDocDocDoc
 """
 from flask import Flask, Blueprint
-from api.v1.views.session_auth import session_auth
+from .session_auth import session_auth  # Use a relative import here
 
 app = Flask(__name__)
 app.register_blueprint(session_auth)
