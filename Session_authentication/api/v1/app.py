@@ -52,6 +52,7 @@ def before_request_func():
         if auth.current_user(request) is None:
             abort(403)
 
+
 def before_request_handler():
     """
     Handle actions before processing the request
