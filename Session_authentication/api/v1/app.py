@@ -43,7 +43,7 @@ def before_request_func():
         return
 
     if getenv('AUTH_TYPE') == 'session_auth':
-        if auth.session_cookie(request) is None or auth.current_user(request) is None:
+        if auth.session_cookie(request) is None and auth.current_user(request) is None:
             abort(401)
     else:
         if auth.authorization_header(request) is None:
