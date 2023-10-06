@@ -4,6 +4,7 @@
 
 from flask import request
 from typing import List, TypeVar
+from os import getenv
 
 
 class Auth:
@@ -24,6 +25,14 @@ class Auth:
             elif path == excluded:
                 return False
         return True
+
+    def session_cookie(self, request=None):
+        """
+        Returns a cookie value from a request
+        """
+        if request is None:
+            return None
+        return request.cookies.get(getenv('SESSION_NAME', ''))
 
     def authorization_header(self, request=None) -> str:
         """authorization_header
