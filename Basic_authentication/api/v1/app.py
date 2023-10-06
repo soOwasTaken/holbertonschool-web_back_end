@@ -17,7 +17,9 @@ auth = None
 if getenv('AUTH_TYPE') == 'auth':
     from api.v1.auth.auth import Auth
     auth = Auth()
-
+elif getenv('AUTH_TYPE') == 'basic_auth':  # Check for 'basic_auth' value
+    from api.v1.auth.basic_auth import BasicAuth  # Import BasicAuth
+    auth = BasicAuth()  # Create an instance of BasicAuth
 
 @app.before_request
 def before_request_handler():
@@ -38,6 +40,7 @@ def before_request_handler():
 
     if auth.current_user(request) is None:
         abort(403)
+
 
 
 @app.errorhandler(404)
