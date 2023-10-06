@@ -42,18 +42,15 @@ def before_request_func():
     if not auth.require_auth(request.path, excluded_paths):
         return
 
-    if auth.authorization_header(request) is None:
-        abort(401)
+    if getenv('AUTH_TYPE') == 'session_auth':
+        if auth.session_cookie(request) is None or auth.current_user(request) is None:
+            abort(403)
+    else:
+        if auth.authorization_header(request) is None:
+            abort(401)
 
-    if auth.current_user(request) is None:
-        abort(403)
-
-    if auth.authorization_header(request) is None:
-        abort(401)
-
-    if auth.session_cookie(request) is None:
-        abort(401)
-
+        if auth.current_user(request) is None:
+            abort(403)
 
 def before_request_handler():
     """
