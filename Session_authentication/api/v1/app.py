@@ -29,7 +29,7 @@ def before_request_func():
     """
     if auth is None:
         return
-    
+
     request.current_user = auth.current_user(request)
 
     excluded_paths = ['/api/v1/status/',
@@ -43,7 +43,6 @@ def before_request_func():
 
     if auth.current_user(request) is None:
         abort(403)
-
 
 
 def before_request_handler():
@@ -91,3 +90,4 @@ if __name__ == "__main__":
     host = getenv("API_HOST", "0.0.0.0")
     port = getenv("API_PORT", "5000")
     app.run(host=host, port=port)
+    
