@@ -25,6 +25,9 @@ elif getenv('AUTH_TYPE') == 'basic_auth':  # Check for 'basic_auth' value
 @app.before_request
 
 def before_request_func():
+    """
+    Handle actions before request
+    """
     request.current_user = auth.current_user(request)
 
 def before_request_handler():
