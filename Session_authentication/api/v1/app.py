@@ -35,22 +35,28 @@ def before_request_func():
 
     request.current_user = auth.current_user(request)
 
-    excluded_paths = ['/api/v1/status/',
-                      '/api/v1/unauthorized/', '/api/v1/forbidden/',
-                      '/api/v1/auth_session/login/']
+    excluded_paths = [
+        '/api/v1/status/',
+        '/api/v1/unauthorized/',
+        '/api/v1/forbidden/',
+        '/api/v1/auth_session/login/'
+    ]
 
     if not auth.require_auth(request.path, excluded_paths):
         return
 
-    if getenv('AUTH_TYPE') == 'session_auth':
-        if auth.session_cookie(request) is None and auth.current_user(request) is None:
-            abort(401)
-    else:
-        if auth.authorization_header(request) is None:
-            abort(401)
+    header = auth.authorization_header(request)
+    has_cookie = hasattr(auth, 'session_cookie')
+    cookie = auth.session_cookie(request) if has_cookie else None
 
-        if auth.current_user(request) is None:
-            abort(403)
+    if header is None and (has_cookie and cookie is None):
+        abort(401)
+
+    if auth.current_user(request) is None:
+        abort(403)
+
+    if header is None:
+        abort(401)
 
 
 def before_request_handler():
@@ -66,8 +72,11 @@ def before_request_handler():
     if not auth.require_auth(request.path, excluded_paths):
         return
 
-    if auth.authorization_header(request) and auth.session_cookie(request) is None:
+    if auth.authorization_header(request) is None:
         abort(401)
+
+    if auth.current_user(request) is None:
+        abort(403)
 
 
 @app.errorhandler(404)
