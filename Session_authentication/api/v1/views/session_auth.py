@@ -2,7 +2,6 @@
 """ Module of Index views
 """
 from flask import Flask, request, jsonify
-from api.v1.auth.session_auth import SessionAuth
 from os import getenv
 from api.v1.app import Auth  
 from models.user import User 
