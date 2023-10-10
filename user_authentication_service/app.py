@@ -41,7 +41,7 @@ def login():
     else:
         abort(401)
 
-
+@app.route('/sessions', methods=['DELETE'])
 def logout():
     """Find the user with the requested session ID. If the user exists destroy
     the session and redirect the user to GET /. If the user does not exist,
