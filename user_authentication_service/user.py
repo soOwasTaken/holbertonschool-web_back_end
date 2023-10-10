@@ -20,7 +20,7 @@ class User(Base):
     reset_token = Column(String, nullable=True)
 
 
-engine = create_engine('sqlite:///example.db', echo=True)
+engine = create_engine('sqlite:///example.db', echo=False)
 
 Base.metadata.create_all(engine)
 
