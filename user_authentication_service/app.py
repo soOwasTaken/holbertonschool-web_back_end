@@ -41,11 +41,10 @@ def login():
     else:
         abort(401)
 
+
 @app.route('/sessions', methods=['DELETE'])
 def logout():
-    """Find the user with the requested session ID. If the user exists destroy
-    the session and redirect the user to GET /. If the user does not exist,
-    respond with a 403 HTTP status.
+    """Find the user with the requested session ID..
     """
     session_id = request.cookies.get('session_id')
     user = AUTH.get_user_from_session_id(session_id)
@@ -59,9 +58,7 @@ def logout():
 
 @app.route('/profile', methods=['GET'])
 def profile():
-    """Find the user with the requested session ID. If the user exists, respond
-    with a 200 HTTP status and a JSON payload of the user's email. If the user
-    does not exist, respond with a 403 HTTP status.
+    """Find the user with the requested session ID.
     """
     session_id = request.cookies.get('session_id')
     user = AUTH.get_user_from_session_id(session_id)
@@ -74,9 +71,7 @@ def profile():
 
 @app.route('/reset_password', methods=['POST'])
 def get_reset_password_token():
-    """Generate a reset password token and respond with a 200 HTTP status and a
-    JSON payload of the reset token. If the email is not registered, respond
-    with a 403 HTTP status.
+    """Generate a reset password token
     """
     email = request.form.get('email')
 
@@ -91,8 +86,8 @@ def get_reset_password_token():
 
 
 def update_password():
-    """Update a user's password and respond with a 200 HTTP status and a JSON
-    payload of the user's email. If the reset token is invalid, respond with a
+    """Update a user's password and ,
+    respond with a 200 HTTP status and a JSON
     403 HTTP status.
     """
     email = request.form.get('email')
