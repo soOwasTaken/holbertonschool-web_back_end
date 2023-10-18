@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+""" Parameterize a unit test, Mock HTTP calls, Parameterize and patch """
 import unittest
 from unittest.mock import patch
 from parameterized import parameterized
