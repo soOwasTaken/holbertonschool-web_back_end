@@ -14,20 +14,20 @@ class TestAccessNestedMap(unittest.TestCase):
         ({"a": {"b": 2}}, ("a",), {"b": 2}),
         ({"a": {"b": 2}}, ("a", "b"), 2),
     ])
-    def test_access_nested_map(self, nested_map, path, expected_result):
+    def test_access_nested_map(self, nested_map, path, answer):
         """ method to test that the method returns what it is supposed to """
-        self.assertEqual(access_nested_map(nested_map, path), expected_result)
+        self.assertEqual(access_nested_map(nested_map, path), answer)
 
+    """  to test that a KeyError is raised for the following inputs """
     @parameterized.expand([
-        ({}, ("a",), KeyError),
-        ({"a": 1}, ("a", "b"), KeyError),
+        ({}, ("a",)),
+        ({"a": 1}, ("a", "b")),
     ])
-    def test_access_nested_map_exception(self,
-                                         nested_map,
-                                         path, expected_exception):
+    def test_access_nested_map_exception(self, nested_map, path):
         """ method to test that a KeyError is raised properly """
-        with self.assertRaises(expected_exception):
+        with self.assertRaises(KeyError) as error:
             access_nested_map(nested_map, path)
+        self.assertEqual(error.exception.args[0], path[-1])
 
 
 class TestGetJson(unittest.TestCase):
@@ -49,10 +49,8 @@ class TestMemoize(unittest.TestCase):
     """ TESTCASE """
 
     def test_memoize(self):
-        """ Test that when calling a_property twice,
-        the correct result is
-            returned but a_method is only called
-            once using assert_called_once
+        """ Test that when calling a_property twice, the correct result is
+            returned but a_method is only called once using assert_called_once
         """
         class TestClass:
             """ class """
@@ -70,7 +68,3 @@ class TestMemoize(unittest.TestCase):
             test_class.a_property
             test_class.a_property
             mockMethod.assert_called_once
-
-
-if __name__ == "__main__":
-    unittest.main()
