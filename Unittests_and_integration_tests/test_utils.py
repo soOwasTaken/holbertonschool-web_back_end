@@ -34,7 +34,9 @@ class TestGetJson(unittest.TestCase):
     ])
     def test_get_json(self, test_url, test_payload):
         mock_get = Mock()
+
         mock_get.json.return_value = test_payload
+
         utils.requests.get.return_value = mock_get
 
         result = get_json(test_url)
