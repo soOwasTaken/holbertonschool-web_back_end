@@ -19,7 +19,9 @@ class TestAccessNestedMap(unittest.TestCase):
         ({}, ("a",), KeyError),
         ({"a": 1}, ("a", "b"), KeyError),
     ])
-    def test_access_nested_map_exception(self, nested_map, path, expected_exception):
+    def test_access_nested_map_exception(self,
+                                         nested_map,
+                                         path, expected_exception):
         with self.assertRaises(expected_exception):
             access_nested_map(nested_map, path)
 
@@ -43,8 +45,10 @@ class TestMemoize(unittest.TestCase):
     """ TESTCASE """
 
     def test_memoize(self):
-        """ Test that when calling a_property twice, the correct result is
-            returned but a_method is only called once using assert_called_once
+        """ Test that when calling a_property twice,
+        the correct result is
+            returned but a_method is only called
+            once using assert_called_once
         """
         class TestClass:
             """ class """
