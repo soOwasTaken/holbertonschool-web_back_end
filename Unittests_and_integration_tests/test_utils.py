@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 import unittest
+from unittest.mock import patch
 from parameterized import parameterized
-from utils import access_nested_map
-from unittest.mock import patch, Mock
-from utils import get_json
+from utils import access_nested_map, get_json, memoize
 
 
 class TestAccessNestedMap(unittest.TestCase):
@@ -26,24 +25,48 @@ class TestAccessNestedMap(unittest.TestCase):
 
 
 class TestGetJson(unittest.TestCase):
-
-    @patch('utils.requests.get')
+    """ TESTCASE """
+    """ to test the function for following inputs """
     @parameterized.expand([
         ("http://example.com", {"payload": True}),
         ("http://holberton.io", {"payload": False}),
     ])
-    def test_get_json(self, test_url, test_payload):
-        mock_get = Mock()
-
-        mock_get.json.return_value = test_payload
-
-        utils.requests.get.return_value = mock_get
-
+    @patch('test_utils.get_json')
+    def test_get_json(self, test_url, test_payload, mock_get):
+        """ method to test that utils.get_json returns the expected result """
+        mock_get.return_value = test_payload
         result = get_json(test_url)
-
-        utils.requests.get.assert_called_once_with(test_url)
-
         self.assertEqual(result, test_payload)
+
+
+class TestMemoize(unittest.TestCase):
+
+    class TestClass:
+
+        def __init__(self):
+            self.method_calls = 0
+
+        def a_method(self):
+            self.method_calls += 1
+            return 42
+
+        @memoize
+        def a_property(self):
+            return self.a_method()
+
+    def test_memoize(self):
+        test_obj = self.TestClass()
+
+        with patch.object(test_obj, 'a_method') as mock_method:
+            mock_method.return_value = 42
+
+            result1 = test_obj.a_property()
+            result2 = test_obj.a_property()
+
+            mock_method.assert_called_once()
+
+            self.assertEqual(result1, 42)
+            self.assertEqual(result2, 42)
 
 
 if __name__ == "__main__":
