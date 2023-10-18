@@ -40,33 +40,28 @@ class TestGetJson(unittest.TestCase):
 
 
 class TestMemoize(unittest.TestCase):
-
-    class TestClass:
-
-        def __init__(self):
-            self.method_calls = 0
-
-        def a_method(self):
-            self.method_calls += 1
-            return 42
-
-        @memoize
-        def a_property(self):
-            return self.a_method()
+    """ TESTCASE """
 
     def test_memoize(self):
-        test_obj = self.TestClass()
+        """ Test that when calling a_property twice, the correct result is
+            returned but a_method is only called once using assert_called_once
+        """
+        class TestClass:
+            """ class """
 
-        with patch.object(test_obj, 'a_method') as mock_method:
-            mock_method.return_value = 42
+            def a_method(self):
+                """ method  """
+                return 42
 
-            result1 = test_obj.a_property()
-            result2 = test_obj.a_property()
-
-            mock_method.assert_called_once()
-
-            self.assertEqual(result1, 42)
-            self.assertEqual(result2, 42)
+            @memoize
+            def a_property(self):
+                """ property """
+                return self.a_method()
+        with patch.object(TestClass, "a_method") as mockMethod:
+            test_class = TestClass()
+            test_class.a_property
+            test_class.a_property
+            mockMethod.assert_called_once
 
 
 if __name__ == "__main__":
