@@ -22,39 +22,38 @@ users = {
 }
 
 
-def get_user(user_id):
-    """get user"""
-    return users.get(user_id)
+def get_user():
+    """ returns a user dictionary or None
+    if the ID cannot be found or if login_as was not passed """
+    try:
+        userId = request.args.get('login_as')
+        return users[int(userId)]
+    except Exception:
+        return None
 
 
 @app.before_request
 def before_request():
     """Before request"""
-    user_id = request.args.get('login_as')
-    if user_id:
-        g.user = get_user(int(user_id))
-    else:
-        g.user = None
+    g.user = get_user()
 
 
 @babel.localeselector
 def get_locale():
-    """ Get locale from request"""
-    url_locale = request.args.get('locale')
-    
-    if hasattr(g, 'user') and g.user and 'locale' in g.user:
-        user_locale = g.user['locale']
-        if user_locale in app.config['LANGUAGES']:
-            return user_locale
-    
-    header_locale = request.accept_languages.best_match(app.config['LANGUAGES'])
-    
-    if url_locale and url_locale in app.config['LANGUAGES']:
-        return url_locale
-    elif header_locale:
-        return header_locale
-    else:
-        return app.config['BABEL_DEFAULT_LOCALE']
+    """ to determine the best match with our supported languages """
+    localLang = request.args.get('locale')
+    supportLang = app.config['LANGUAGES']
+    if localLang in supportLang:
+        return localLang
+    userId = request.args.get('login_as')
+    if userId:
+        localLang = users[int(userId)]['locale']
+        if localLang in supportLang:
+            return localLang
+    localLang = request.headers.get('locale')
+    if localLang in supportLang:
+        return localLang
+    return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 
 app.config.from_object(Config)
