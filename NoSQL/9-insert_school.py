@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-from pymongo import MongoClient
+import pymongo
+
 
 def insert_school(mongo_collection, **kwargs):
-    """ Insert a new document in a collection based on kwargs """
-    insert_result = mongo_collection.insert_one(kwargs)
-    return insert_result.inserted_id
+    """ inserts a new document in a collection based on kwargs,
+    Returns the new _id """
+    return mongo_collection.insert_one(kwargs).inserted_id
