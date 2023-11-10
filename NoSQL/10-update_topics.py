@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+""" 10-update_topics """""
 import pymongo
 
 
