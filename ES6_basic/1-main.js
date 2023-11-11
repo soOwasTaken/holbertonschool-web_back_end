@@ -1,4 +1,7 @@
-import taskBlock from './1-block-scoped.js';
+import { taskFirst, taskNext } from "./0-constants.js";
 
-console.log(taskBlock(true));
-console.log(taskBlock(false));
+test("tasks are correctly defined", () => {
+  expect(`${taskFirst()} ${taskNext()}`).toEqual(
+    "I prefer const when I can. But sometimes let is okay"
+  );
+});
