@@ -1,26 +1,23 @@
 #!/usr/bin/env python3
-"""Log stats"""
+""" Log stats """
 from pymongo import MongoClient
 
 
-def helper(a: dict) -> int:
-    """return log"""
-    client = MongoClient('mongodb://127.0.0.1:27017')
-    logs = client.logs.nginx
-    return logs.count_documents(a)
-
-
-def main():
-    """ provides some stats about Nginx logs stored in MongoDB """
-    print(f"{helper({})} logs")
-    print("Methods:")
-    print(f"\tmethod GET: {helper({'method': 'GET'})}")
-    print(f"\tmethod POST: {helper({'method': 'POST'})}")
-    print(f"\tmethod PUT: {helper({'method': 'PUT'})}")
-    print(f"\tmethod PATCH: {helper({'method': 'PATCH'})}")
-    print(f"\tmethod DELETE: {helper({'method': 'DELETE'})}")
-    print(f"{helper({'method': 'GET', 'path': '/status'})} status check")
-
-
 if __name__ == "__main__":
-    main()
+    client = MongoClient('mongodb://127.0.0.1:27017')
+    db_nginx = client.logs.nginx
+    methods = ["GET", "POST", "PUT", "PATCH", "DELETE"]
+
+    count_logs = db_nginx.count_documents({})
+    print(f'{count_logs} logs')
+
+    print('Methods:')
+    for method in methods:
+        count_method = db_nginx.count_documents({'method': method})
+        print(f'\tmethod {method}: {count_method}')
+
+    check = db_nginx.count_documents(
+        {"method": "GET", "path": "/status"}
+    )
+
+    print(f'{check} status check')
