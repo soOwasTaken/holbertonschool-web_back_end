@@ -3,31 +3,40 @@ const { readDatabase } = require('../utils');
 class StudentsController {
   static async getAllStudents(req, res) {
     try {
-      const students = await readDatabase(process.argv[2]);
-      let response = 'This is the list of our students\n';
-      for (const [field, names] of Object.entries(students)) {
-        response += `Number of students in ${field}: ${
-          names.length
-        }. List: ${names.join(', ')}\n`;
+      const data = await readDatabase(req.databasePath);
+
+      let responseMessage = 'This is the list of our students\n';
+      for (const field in data) {
+        if (Object.prototype.hasOwnProperty.call(data, field)) {
+          responseMessage += `Number of students in ${field}: ${
+            data[field].count
+          }. List: ${data[field].list.join(', ')}\n`;
+        }
       }
-      return res.status(200).send(response);
+      res.status(200).send(responseMessage);
     } catch (error) {
-      return res.status(500).send('Cannot load the database');
+      res.status(500).send('Cannot load the database');
     }
   }
 
   static async getAllStudentsByMajor(req, res) {
-    try {
-      const { major } = req.params;
-      if (!['CS', 'SWE'].includes(major)) {
-        return res.status(500).send('Major parameter must be CS or SWE');
-      }
-      const students = await readDatabase(process.argv[3]);
-      const names = students[major] || [];
-      return res.status(200).send(`List: ${names.join(', ')}`);
-    } catch (error) {
-      return res.status(500).send('Cannot load the database');
+    const major = req.params.major.toUpperCase();
+    if (major !== 'CS' && major !== 'SWE') {
+      return res.status(500).send('Major parameter must be CS or SWE');
     }
+
+    try {
+      const data = await readDatabase(req.databasePath);
+
+      const responseMessage = `List of students in ${major}: ${data[
+        major
+      ].list.join(', ')}`;
+
+      res.status(200).send(responseMessage);
+    } catch (error) {
+      res.status(500).send('Cannot load the database');
+    }
+    return null;
   }
 }
 
