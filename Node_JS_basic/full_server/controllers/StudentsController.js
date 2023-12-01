@@ -3,7 +3,7 @@ const { readDatabase } = require('../utils');
 class StudentsController {
   static async getAllStudents(req, res) {
     try {
-      const students = await readDatabase(process.argv[3]);
+      const students = await readDatabase(process.argv[2]);
       let response = 'This is the list of our students\n';
       for (const [field, names] of Object.entries(students)) {
         response += `Number of students in ${field}: ${
