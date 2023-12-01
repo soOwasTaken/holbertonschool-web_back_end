@@ -12,7 +12,7 @@ class StudentsController {
       }
       return res.status(200).send(response);
     } catch (error) {
-      return res.status(500).send(error.message);
+      return res.status(500).send('Cannot load the database');
     }
   }
 
@@ -26,7 +26,7 @@ class StudentsController {
       const names = students[major] || [];
       return res.status(200).send(`List: ${names.join(', ')}`);
     } catch (error) {
-      return res.status(500).send(error.message);
+      return res.status(500).send('Cannot load the database');
     }
   }
 }
