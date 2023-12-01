@@ -1,4 +1,5 @@
-// Execute: node 0-console.js
-function DisplayMessage(message) {
-  console.log(message);
+function displayMessage(str) {
+  console.log(str);
 }
+
+module.exports = displayMessage;
