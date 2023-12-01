@@ -10,7 +10,7 @@ function countStudents(path) {
   }
 
   const lines = content.split("\n").filter((line) => line.trim());
-  const students = lines.slice(1); // Skip the header row
+  const students = lines.slice(1);
 
   console.log(`Number of students: ${students.length}`);
 
