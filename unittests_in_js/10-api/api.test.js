@@ -9,6 +9,12 @@ describe("Index page", () => {
       done();
     });
   });
+  it("should return 'Welcome to the payment system'", (done) => {
+    request("http://localhost:7865", (error, response, body) => {
+      expect(body).to.equal("Welcome to the payment system");
+      done();
+    });
+  });
 });
 
 describe("Cart page", () => {
