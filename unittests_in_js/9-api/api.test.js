@@ -3,14 +3,12 @@ const request = require("request");
 const expect = chai.expect;
 
 describe("Index page", () => {
-    app.get("/", (req, res) => {
-    res.send("Welcome to the payment system");
+  it("should return correct status code", (done) => {
+    request("http://localhost:7865", (error, response, body) => {
+      expect(response.statusCode).to.equal(200);
+      done();
     });
-
-    const PORT = 7865;
-    app.listen(PORT, () => {
-    console.log(`API available on localhost port ${PORT}`);
-    });
+  });
 });
 
 describe("Cart page", () => {
@@ -28,4 +26,6 @@ describe("Cart page", () => {
       done();
     });
   });
+
+  // Add more tests as needed
 });
